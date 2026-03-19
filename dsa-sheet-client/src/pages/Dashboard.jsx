@@ -19,6 +19,7 @@ const Dashboard = () => {
 
   const { progress, loadProgress, toggle } = useProgress();
   const [activeSlug, setActiveSlug] = useState('');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     loadTopics();
@@ -76,27 +77,33 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
-      <Navbar solved={overallSolved} total={totalProblems} />
+      <Navbar
+        solved={overallSolved}
+        total={totalProblems}
+        onToggleSidebar={() => setSidebarOpen((o) => !o)}
+      />
 
       <Sidebar
         topics={topics}
         activeSlug={activeSlug}
         onSelectTopic={handleSelectTopic}
         getTopicProgress={getTopicProgress}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
-      <main className="pl-72 pt-14 min-h-screen">
-        <div className="max-w-5xl mx-auto px-6 py-8">
+      <main className="pt-14 min-h-screen lg:pl-72">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {activeTopic && (
             <div className="mb-6">
-              <h1 className="text-xl font-semibold text-gray-100 mb-1">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-100 mb-1">
                 {activeTopic.name}
               </h1>
               {activeTopic.description && (
                 <p className="text-sm text-gray-500 mb-3">{activeTopic.description}</p>
               )}
               {activeTopicProgress && (
-                <div className="w-64">
+                <div className="w-full max-w-xs">
                   <ProgressBar
                     solved={activeTopicProgress.solved}
                     total={activeTopicProgress.total}
